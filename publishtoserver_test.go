@@ -25,19 +25,19 @@ func TestPublishToServer(t *testing.T) {
 	}
 
 	result := client.Connect(proxies)
-	if len(result.errors) != 0 {
-		t.Fatalf("Errors during connection: %v", result.errors)
+	if len(result.Errors) != 0 {
+		t.Fatalf("Errors during connection: %v", result.Errors)
 	}
-	if len(result.successful) != 1 {
-		t.Fatalf("Unexpected number of successful connections: %d", len(result.successful))
+	if len(result.Successful) != 1 {
+		t.Fatalf("Unexpected number of successful connections: %d", len(result.Successful))
 	}
 
 	data := []byte("Hello from Go!")
 	result = client.Publish(data, ethereumPrivateKey)
-	if len(result.errors) != 0 {
-		t.Fatalf("Errors during publish: %v", result.errors)
+	if len(result.Errors) != 0 {
+		t.Fatalf("Errors during publish: %v", result.Errors)
 	}
-	if len(result.successful) != 1 {
-		t.Fatalf("Unexpected number of successful publishes: %d", len(result.successful))
+	if len(result.Successful) != 1 {
+		t.Fatalf("Unexpected number of successful publishes: %d", len(result.Successful))
 	}
 }

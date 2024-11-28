@@ -41,8 +41,8 @@ func TestInvalidEthereumAddress(t *testing.T) {
     client, err := NewProxyClient(invalidEthereumAddress, validStreamPartId)
     if err == nil {
         t.Fatalf("Expected error for invalid Ethereum address")
-    } else if err.code != ERROR_INVALID_ETHEREUM_ADDRESS {
-        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_ETHEREUM_ADDRESS, err.code)
+    } else if err.Code != ERROR_INVALID_ETHEREUM_ADDRESS {
+        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_ETHEREUM_ADDRESS, err.Code)
     }
     if client != nil {
         defer client.Close()
@@ -56,8 +56,8 @@ func TestInvalidStreamPartId(t *testing.T) {
     client, err := NewProxyClient(validEthereumAddress, invalidStreamPartId)
     if err == nil {
         t.Fatalf("Expected error for invalid stream part id")
-    } else if err.code != ERROR_INVALID_STREAM_PART_ID {
-        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_STREAM_PART_ID, err.code)
+    } else if err.Code != ERROR_INVALID_STREAM_PART_ID {
+        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_STREAM_PART_ID, err.Code)
     }
     if client != nil {
         defer client.Close()
@@ -74,12 +74,12 @@ func TestNoProxiesDefined(t *testing.T) {
     }
     defer client.Close()
     result := client.Connect([]Proxy {})
-    if result.errors == nil {
+    if result.Errors == nil {
         t.Fatalf("Expected error code %s, got nil", ERROR_NO_PROXIES_DEFINED)
-    } else if result.errors[0].code != ERROR_NO_PROXIES_DEFINED {
-        t.Fatalf("Expected error code %s, got %s", ERROR_NO_PROXIES_DEFINED, result.errors[0].code)
+    } else if result.Errors[0].Code != ERROR_NO_PROXIES_DEFINED {
+        t.Fatalf("Expected error code %s, got %s", ERROR_NO_PROXIES_DEFINED, result.Errors[0].Code)
     }
-    if len(result.successful) != 0 {
+    if len(result.Successful) != 0 {
         t.Fatalf("Expected nil successful proxies for no proxies defined")
     }
 }
@@ -93,17 +93,17 @@ func TestInvalidProxyUrl(t *testing.T) {
     }
     defer client.Close()
     proxies := []Proxy{
-        {websocketUrl: invalidProxyUrl, ethereumAddress: validEthereumAddress},
+        {WebsocketUrl: invalidProxyUrl, EthereumAddress: validEthereumAddress},
     }
     fmt.Println("calling connect")
     result := client.Connect(proxies)
     fmt.Println("Testing invalid proxy URL")
-    if len(result.errors) != 1 {
-        t.Fatalf("Expected 1 error for invalid proxy url, got %d", len(result.errors))
-    } else if result.errors[0].code != ERROR_INVALID_PROXY_URL {
-        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_PROXY_URL, result.errors[0].code)
+    if len(result.Errors) != 1 {
+        t.Fatalf("Expected 1 error for invalid proxy url, got %d", len(result.Errors))
+    } else if result.Errors[0].Code != ERROR_INVALID_PROXY_URL {
+        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_PROXY_URL, result.Errors[0].Code)
     }
-    if len(result.successful) != 0 {
+    if len(result.Successful) != 0 {
         t.Fatalf("Expected nil successful proxies for invalid proxy url")
     }
 }
@@ -117,15 +117,15 @@ func TestInvalidProxyEthereumAddress(t *testing.T) {
     }
     defer client.Close()
     proxies := []Proxy{
-        {websocketUrl: validProxyUrl, ethereumAddress: invalidEthereumAddress},
+        {WebsocketUrl: validProxyUrl, EthereumAddress: invalidEthereumAddress},
     }
     result := client.Connect(proxies)
-    if len(result.errors) != 1 {
-        t.Fatalf("Expected 1 error for invalid proxy ethereum address, got %d", len(result.errors))
-    } else if result.errors[0].code != ERROR_INVALID_ETHEREUM_ADDRESS {
-        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_ETHEREUM_ADDRESS, result.errors[0].code)
+    if len(result.Errors) != 1 {
+        t.Fatalf("Expected 1 error for invalid proxy ethereum address, got %d", len(result.Errors))
+    } else if result.Errors[0].Code != ERROR_INVALID_ETHEREUM_ADDRESS {
+        t.Fatalf("Expected error code %s, got %s", ERROR_INVALID_ETHEREUM_ADDRESS, result.Errors[0].Code)
     }
-    if len(result.successful) != 0 {
+    if len(result.Successful) != 0 {
         t.Fatalf("Expected nil successful proxies for invalid proxy ethereum address")
     }
 }
@@ -139,15 +139,15 @@ func TestProxyConnectionFailed(t *testing.T) {
     }
     defer client.Close()
     proxies := []Proxy{
-        {websocketUrl: nonExistentProxyUrl0, ethereumAddress: validEthereumAddress},
+        {WebsocketUrl: nonExistentProxyUrl0, EthereumAddress: validEthereumAddress},
     }
     result := client.Connect(proxies)
-    if len(result.errors) != 1 {
-        t.Fatalf("Expected 1 error for proxy connection failed, got %d", len(result.errors))
-    } else if result.errors[0].code != ERROR_PROXY_CONNECTION_FAILED {
-        t.Fatalf("Expected error code %s, got %s", ERROR_PROXY_CONNECTION_FAILED, result.errors[0].code)
+    if len(result.Errors) != 1 {
+        t.Fatalf("Expected 1 error for proxy connection failed, got %d", len(result.Errors))
+    } else if result.Errors[0].Code != ERROR_PROXY_CONNECTION_FAILED {
+        t.Fatalf("Expected error code %s, got %s", ERROR_PROXY_CONNECTION_FAILED, result.Errors[0].Code)
     }
-    if len(result.successful) != 0 {    
+    if len(result.Successful) != 0 {    
         t.Fatalf("Expected nil successful proxies for proxy connection failed")
     }
 }
@@ -161,17 +161,17 @@ func TestThreeProxyConnectionsFailed(t *testing.T) {
     }
     defer client.Close()
     proxies := []Proxy{
-        {websocketUrl: nonExistentProxyUrl0, ethereumAddress: validEthereumAddress},
-        {websocketUrl: nonExistentProxyUrl1, ethereumAddress: validEthereumAddress2},
-        {websocketUrl: nonExistentProxyUrl2, ethereumAddress: validEthereumAddress3},
+        {WebsocketUrl: nonExistentProxyUrl0, EthereumAddress: validEthereumAddress},
+        {WebsocketUrl: nonExistentProxyUrl1, EthereumAddress: validEthereumAddress2},
+        {WebsocketUrl: nonExistentProxyUrl2, EthereumAddress: validEthereumAddress3},
     }
     result := client.Connect(proxies)
-    if len(result.errors) != 3 {
-        t.Fatalf("Expected 3 errors for three proxy connections failed, got %d", len(result.errors))
+    if len(result.Errors) != 3 {
+        t.Fatalf("Expected 3 errors for three proxy connections failed, got %d", len(result.Errors))
     } else {
-        for i, err := range result.errors {
-            if err.code != ERROR_PROXY_CONNECTION_FAILED {
-                t.Fatalf("Expected error code %s for error %d, got %s", ERROR_PROXY_CONNECTION_FAILED, i, err.code)
+        for i, err := range result.Errors {
+            if err.Code != ERROR_PROXY_CONNECTION_FAILED {
+                t.Fatalf("Expected error code %s for error %d, got %s", ERROR_PROXY_CONNECTION_FAILED, i, err.Code)
             }
             expectedWebsocketUrl := ""
             expectedEthereumAddress := ""
@@ -186,15 +186,15 @@ func TestThreeProxyConnectionsFailed(t *testing.T) {
                 expectedWebsocketUrl = nonExistentProxyUrl2
                 expectedEthereumAddress = validEthereumAddress3
             }
-            if err.proxy.websocketUrl != expectedWebsocketUrl {
-                t.Fatalf("Expected websocket URL %s for error %d, got %s", expectedWebsocketUrl, i, err.proxy.websocketUrl)
+            if err.Proxy.WebsocketUrl != expectedWebsocketUrl {
+                t.Fatalf("Expected websocket URL %s for error %d, got %s", expectedWebsocketUrl, i, err.Proxy.WebsocketUrl)
             }
-            if err.proxy.ethereumAddress != expectedEthereumAddress {
-                t.Fatalf("Expected ethereum address %s for error %d, got %s", expectedEthereumAddress, i, err.proxy.ethereumAddress)
+            if err.Proxy.EthereumAddress != expectedEthereumAddress {
+                t.Fatalf("Expected ethereum address %s for error %d, got %s", expectedEthereumAddress, i, err.Proxy.EthereumAddress)
             }
         }
     }
-    if len(result.successful) != 0 {
+    if len(result.Successful) != 0 {
         t.Fatalf("Expected nil successful proxies for three proxy connections failed")
     }
 }
